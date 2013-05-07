@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130507055264) do
+ActiveRecord::Schema.define(:version => 20130507065833) do
 
   create_table "spree_activators", :force => true do |t|
     t.string   "description"
@@ -188,7 +188,10 @@ ActiveRecord::Schema.define(:version => 20130507055264) do
     t.integer  "position",                    :default => 0, :null => false
     t.datetime "created_at",                                 :null => false
     t.datetime "updated_at",                                 :null => false
+    t.integer  "user_id",                     :default => 0, :null => false
   end
+
+  add_index "spree_option_types", ["user_id"], :name => "index_spree_option_types_on_user_id"
 
   create_table "spree_option_types_prototypes", :id => false, :force => true do |t|
     t.integer "prototype_id"
@@ -311,12 +314,14 @@ ActiveRecord::Schema.define(:version => 20130507055264) do
     t.datetime "created_at",                              :null => false
     t.datetime "updated_at",                              :null => false
     t.boolean  "on_demand",            :default => false
+    t.integer  "user_id",              :default => 0,     :null => false
   end
 
   add_index "spree_products", ["available_on"], :name => "index_spree_products_on_available_on"
   add_index "spree_products", ["deleted_at"], :name => "index_spree_products_on_deleted_at"
   add_index "spree_products", ["name"], :name => "index_spree_products_on_name"
   add_index "spree_products", ["permalink"], :name => "index_spree_products_on_permalink"
+  add_index "spree_products", ["user_id"], :name => "index_spree_orders_on_user_id"
 
   create_table "spree_products_promotion_rules", :id => false, :force => true do |t|
     t.integer "product_id"
@@ -368,10 +373,13 @@ ActiveRecord::Schema.define(:version => 20130507055264) do
 
   create_table "spree_properties", :force => true do |t|
     t.string   "name"
-    t.string   "presentation", :null => false
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.string   "presentation",                :null => false
+    t.datetime "created_at",                  :null => false
+    t.datetime "updated_at",                  :null => false
+    t.integer  "user_id",      :default => 0, :null => false
   end
+
+  add_index "spree_properties", ["user_id"], :name => "index_spree_properties_on_user_id"
 
   create_table "spree_properties_prototypes", :id => false, :force => true do |t|
     t.integer "prototype_id"
@@ -380,9 +388,12 @@ ActiveRecord::Schema.define(:version => 20130507055264) do
 
   create_table "spree_prototypes", :force => true do |t|
     t.string   "name"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
+    t.integer  "user_id",    :default => 0, :null => false
   end
+
+  add_index "spree_prototypes", ["user_id"], :name => "index_spree_prototypes_on_user_id"
 
   create_table "spree_return_authorizations", :force => true do |t|
     t.string   "number"
@@ -439,6 +450,33 @@ ActiveRecord::Schema.define(:version => 20130507055264) do
     t.datetime "created_at",           :null => false
     t.datetime "updated_at",           :null => false
   end
+
+  create_table "spree_shop_orders", :force => true do |t|
+    t.string   "number",               :limit => 15
+    t.decimal  "item_total",                         :precision => 8, :scale => 2, :default => 0.0, :null => false
+    t.decimal  "total",                              :precision => 8, :scale => 2, :default => 0.0, :null => false
+    t.string   "state"
+    t.decimal  "adjustment_total",                   :precision => 8, :scale => 2, :default => 0.0, :null => false
+    t.integer  "user_id"
+    t.datetime "created_at",                                                                        :null => false
+    t.datetime "updated_at",                                                                        :null => false
+    t.datetime "completed_at"
+    t.integer  "bill_address_id"
+    t.integer  "ship_address_id"
+    t.decimal  "payment_total",                      :precision => 8, :scale => 2, :default => 0.0
+    t.integer  "shipping_method_id"
+    t.string   "shipment_state"
+    t.string   "payment_state"
+    t.string   "email"
+    t.text     "special_instructions"
+    t.integer  "shop_user_id",                                                     :default => 0,   :null => false
+    t.integer  "order_id",                                                         :default => 0,   :null => false
+  end
+
+  add_index "spree_shop_orders", ["number"], :name => "index_spree_shop_orders_on_number"
+  add_index "spree_shop_orders", ["order_id"], :name => "index_spree_shop_orders_on_order_id"
+  add_index "spree_shop_orders", ["shop_user_id"], :name => "index_spree_shop_orders_on_shop_user_id"
+  add_index "spree_shop_orders", ["user_id"], :name => "index_spree_shop_orders_on_user_id"
 
   create_table "spree_skrill_transactions", :force => true do |t|
     t.string   "email"
