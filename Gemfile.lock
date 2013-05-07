@@ -1,4 +1,11 @@
 GIT
+  remote: git://github.com/haman29/spree_c2c.git
+  revision: cc51800422bcd6fd51562402d28c359843d9b2b8
+  specs:
+    spree_c2c (0.0.1)
+      spree_core (~> 1.3.2)
+
+GIT
   remote: git://github.com/spree/spree_auth_devise.git
   revision: 9b874ec5486467059d08b95f57086ab2587b18f6
   branch: 1-3-stable
@@ -271,6 +278,7 @@ DEPENDENCIES
   sass-rails (~> 3.2.3)
   spree (= 1.3.2)
   spree_auth_devise!
+  spree_c2c!
   spree_gateway!
   sqlite3
   uglifier (>= 1.0.3)
